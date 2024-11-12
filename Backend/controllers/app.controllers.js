@@ -5,43 +5,56 @@ import validator from "validator";
 import dotenv from "dotenv"
 dotenv.config();
 
-//create token
-const createToken = (id) => {
-    return jwt.sign({id}, process.env.JWT_SECRET, {
-        expiresIn: 3 * 24 * 60 * 60
-    })
-}
+const createToken = (userId) => {
+    // Optionally extend the expiration to match the cookie's expiration (e.g., 1 year)
+    return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' }); // Or '1y' for longer expiry
+};
 
-//user login
-const loginUser = async (req,res) => {
-    const {email, password} = req.body;
-    try{
-        if(!email || !password){
-            return res.status(400).json({message: "Please enter all fields"})
-        }
-        const user = await userModel.findOne({email})
+const loginUser = async (req, res) => {
+    const { email, password } = req.body;
 
-        if(!user){
-            return res.status(400).json({message: "User does not exist"})
+    try {
+        // Validate input fields
+        if (!email || !password) {
+            return res.status(400).json({ message: "Please enter all fields" });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password)
-        if(!isMatch){
-            return res.status(400).json({message: "Invalid credentials"})
+        // Check if user exists in the database
+        const user = await userModel.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: "User does not exist" });
         }
-        const token = createToken(user._id)
-        console.log(token);
-        
-        res.status(200).json(
-            {   token,
-                message:"login successful",
-                success: true
-            }
-        )
+
+        // Compare provided password with hashed password in DB
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid credentials" });
+        }
+
+        // Generate JWT token
+        const token = createToken(user._id);
+
+        // Set the token in an HTTP-only cookie
+        res.cookie('token', token, {
+            httpOnly: true, // Prevents client-side access
+            secure: process.env.NODE_ENV === 'production', // Only set secure cookies in production (https)
+            sameSite: 'None', // Required for cross-origin requests
+            maxAge: 365 * 24 * 60 * 60 * 1000, // Cookie expires in 1 year (365 days)
+        });
+
+        // Send response indicating successful login (no need to send token in body if using cookies)
+        return res.status(200).json({
+            message: "Login successful",
+            success: true,
+        });
+
     } catch (error) {
-        res.status(500).json({message: error.message})
+        console.error(error);
+        return res.status(500).json({ message: error.message });
     }
-}
+};
+
+
 
 //register user
 const registerUser = async (req,res) => {

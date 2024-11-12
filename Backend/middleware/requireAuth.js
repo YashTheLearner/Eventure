@@ -1,33 +1,34 @@
 import jwt from 'jsonwebtoken';
 
 const requireAuth = async (req, res, next) => {
-    const { authorization } = req.headers;
-
-    if (!authorization) {
-        return res.status(401).json({ message: 'Authorization header is missing' });
-    }
-
-    // Split the authorization header into 'Bearer' and 'token'
-    const token = authorization.split(' ')[1];
-
-    if (!token) {
-        return res.status(401).json({ message: 'Token missing' });
-    }
-
     try {
-        // Verify the token using JWT secret
+        // Check if the token is in the cookies or in the `Authorization` header
+        let token = req.cookies.token;
+        console.log(req);
+
+        if (!token && req.headers.authorization) {
+            // Extract the token from the `Authorization` header if it's in the 'Bearer token' format
+            const authHeader = req.headers.authorization;
+            if (authHeader.startsWith('Bearer ')) {
+                token = authHeader.split(' ')[1];
+            }
+        }
+
+        if (!token) {
+            return res.status(401).json({ message: 'Token is missing' });
+        }
+
+        // Verify the token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
+
         // Attach user data to the request object
         req.user = decoded;
+        req.token = token; // Optional: attach the token if needed for reference
 
-        // Optionally, attach the token if needed for reference
-        req.token = token;
-
-        // Call the next middleware or route handler
-        next();
+        next(); // Call the next middleware or route handler
     } catch (error) {
         // Handle specific JWT errors like invalid/expired token
+        console.log('Error in requireAuth:', error);
         if (error.name === 'TokenExpiredError') {
             return res.status(401).json({ message: 'Token has expired' });
         }
@@ -35,8 +36,8 @@ const requireAuth = async (req, res, next) => {
             return res.status(401).json({ message: 'Invalid token' });
         }
 
-        // Handle other errors
-        return res.status(500).json({ message: error.message });
+        console.error('Error in requireAuth:', error);
+        return res.status(500).json({ message: 'Server error' });
     }
 };
 

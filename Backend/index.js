@@ -4,6 +4,9 @@ import mongoose from 'mongoose';
 import userRouter from './routes/app.routes.js';
 import cors from "cors"
 import eventRouter from './routes/event.routes.js';
+import cookieParser from 'cookie-parser';
+
+
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -22,9 +25,11 @@ const connectDB = async () => {
 
 const app = express();
 
-
+app.use(cookieParser());
 app.use(express.json())
-app.use(cors());
+app.use(cors({ origin: `${process.env.FRONTEND_URL}`, // Replace with your frontend URL
+    credentials: true // Allow credentials to be sent
+    }));
 
 
 app.use("/api/user", userRouter);

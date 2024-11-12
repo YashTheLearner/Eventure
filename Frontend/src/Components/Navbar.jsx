@@ -44,13 +44,14 @@ export const Navbar = ({ setIsSidebarOpen }) => {
             className="p-2 rounded bg-[#2c3e50] text-white placeholder-[#95a5a6]"
           />
 
-          {/* Round avatar */}
-          <div onClick={() => setIsSidebarOpen(true)}>
+          {/* Round avatar with name */}
+          <div className='flex items-center space-x-2 cursor-pointer' onClick={() => setIsSidebarOpen(true)}>
             <img
               src="https://via.placeholder.com/40" // Replace this URL with the path to your avatar image
               alt="User Avatar"
               className="w-10 h-10 rounded-full object-cover"
             />
+            <h1 className='text-white font-medium'>Yash</h1>
           </div>
         </div>
       </div>
