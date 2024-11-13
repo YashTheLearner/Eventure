@@ -3,10 +3,8 @@ import jwt from 'jsonwebtoken';
 const requireAuth = async (req, res, next) => {
     try {
         // Check if the token is in the cookies or in the `Authorization` header
-        let token = req.cookies.token;
-        console.log(req);
-
-        if (!token && req.headers.authorization) {
+        let token ;
+        if (req.headers.authorization) {
             // Extract the token from the `Authorization` header if it's in the 'Bearer token' format
             const authHeader = req.headers.authorization;
             if (authHeader.startsWith('Bearer ')) {
@@ -15,7 +13,7 @@ const requireAuth = async (req, res, next) => {
         }
 
         if (!token) {
-            return res.status(401).json({ message: 'Token is missing' });
+            return res.status(200).json({ message: 'Token is missing' });
         }
 
         // Verify the token
@@ -30,10 +28,10 @@ const requireAuth = async (req, res, next) => {
         // Handle specific JWT errors like invalid/expired token
         console.log('Error in requireAuth:', error);
         if (error.name === 'TokenExpiredError') {
-            return res.status(401).json({ message: 'Token has expired' });
+            return res.status(200).json({ message: 'Token has expired' });
         }
         if (error.name === 'JsonWebTokenError') {
-            return res.status(401).json({ message: 'Invalid token' });
+            return res.status(200).json({ message: 'Invalid token' });
         }
 
         console.error('Error in requireAuth:', error);

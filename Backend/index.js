@@ -25,9 +25,10 @@ const connectDB = async () => {
 
 const app = express();
 
+app.use('/public', express.static('public'));
 app.use(cookieParser());
 app.use(express.json())
-app.use(cors({ origin: `${process.env.FRONTEND_URL}`, // Replace with your frontend URL
+app.use(cors({ origin: true ,//`${process.env.FRONTEND_URL}`, // Replace with your frontend URL
     credentials: true // Allow credentials to be sent
     }));
 

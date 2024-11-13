@@ -20,8 +20,6 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { path: '', element: <Home /> },
-      { path: 'login', element: <Login /> },
-      { path: 'signup', element: <Signup /> },
       { path: 'event', element: <Event /> },
       { path: 'profile', element: <Profile /> },
       { path: 'createEvent', element: <CreateEventForm /> },
@@ -29,11 +27,13 @@ const router = createBrowserRouter([
       { path: 'myevents', element: <MyEvents /> },
       { path: 'dashboard', element: <Dashboard /> },
     ]
-  }
+  },
+  { path: 'login', element: <Login /> },
+  { path: 'signup', element: <Signup /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} future={{ v7_skipActionErrorRevalidation: true }} />
+    <RouterProvider router={router} future={{ v7_startTransition: true }} />
   </React.StrictMode>
 );

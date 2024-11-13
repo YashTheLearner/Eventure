@@ -7,12 +7,13 @@ import Sidebar from './Components/Sidebar.jsx';
 function App() {
   const [isActive, setIsActive] = useState(true); // State to handle sidebar visibility
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to handle sidebar visibility
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
     <>
-      <Navbar setIsSidebarOpen={setIsSidebarOpen} />
+      <Navbar setIsSidebarOpen={setIsSidebarOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated}/>
       <OutletWrapper isActive={isActive} /> {/* Use the wrapper component */}
-      <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} /> {/* Pass the state and setter as props */}
+      <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} setIsAuthenticated={setIsAuthenticated} /> {/* Pass the state and setter as props */}
     </>
   );
 }

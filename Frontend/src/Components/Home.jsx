@@ -1,27 +1,49 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import UncontrolledExample from './UncontrolledExample.jsx';
 import carrer from '../assets/career-development.jpg';
 import axios from '../Axios/axios.jsx';
 import { useNavigate } from 'react-router-dom';
 
 
+
 const Home = () => {
 
-  const navigate = useNavigate();
-  // useEffect(() => {
-  //   const fetchAvatar = async () => {
-  //     try {
-  //       let response = await axios.get(`/user/avatar`, { withCredentials: true });
-  //       console.log(response);
-  //     } catch (error) {
-  //       console.log('Error fetching todos:', error);
-  //       if (error.response.status === 401)
-  //         navigate('/');
-  //     }
-  //   };
-  //   fetchAvatar(); 
-  // },[]);
+  const [name, setName] = useState(null);
+  const [avatar, setAvatar] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      try {
+        // Retrieve the token from localStorage
+        const token = localStorage.getItem('token');
+
+        // Make the request to fetch the avatar, include the token in the headers
+        let response = await axios.get(`/user/avatar`, {
+          headers: {
+            Authorization: `Bearer ${token}`  // Send token as Bearer token
+          },
+        });
+        if(response.data.success === true){
+          setIsAuthenticated(true);
+        }
+        console.log(response.data); // Log the response to check the data
+      } catch (error) {
+        // If the error is 401 (Unauthorized), clear localStorage and redirect to login
+        if (error.response && error.response.status === 401) {
+          localStorage.removeItem('token'); // Clear the token);
+        } else {
+          console.log('Unexpected error:', error);
+        }
+      }
+    };
+
+    // Call the fetchAvatar function when the component mounts
+    fetchAvatar();
+  }, []); // Add navigate to the dependency array
+
+console.log(isAuthenticated);
 
   return (
     <>
@@ -44,7 +66,7 @@ const Home = () => {
   {/* <!-- Event Card 1 --> */}
   <div className="event-card bg-[#22333b] rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition-all duration-300 hover:translate-y-[-5px] hover:shadow-2xl">
     <div className="event-image-container relative bg-[#22333b] p-12 grid gap-4 overflow-hidden transition-colors">
-      <img src={carrer} alt="Event Image 1" className="event-image w-full w-full h-[150px] object-cover" />
+      <img src={carrer} alt="Event Image 1" className="event-image w-full h-[150px] object-cover" />
       <div className="event-status absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">Free</div>
     </div>
     <div className="event-info p-4 text-[#f5f5f5]">

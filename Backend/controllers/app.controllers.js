@@ -32,20 +32,14 @@ const loginUser = async (req, res) => {
         }
 
         // Generate JWT token
-        const token = createToken(user._id);
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+        console.log("token", token)
 
-        // Set the token in an HTTP-only cookie
-        res.cookie('token', token, {
-            httpOnly: true, // Prevents client-side access
-            secure: process.env.NODE_ENV === 'production', // Only set secure cookies in production (https)
-            sameSite: 'None', // Required for cross-origin requests
-            maxAge: 365 * 24 * 60 * 60 * 1000, // Cookie expires in 1 year (365 days)
-        });
-
-        // Send response indicating successful login (no need to send token in body if using cookies)
+        // Send response with success
         return res.status(200).json({
-            message: "Login successful",
-            success: true,
+          message: "Login successful",
+          success: true,
+          token,
         });
 
     } catch (error) {

@@ -15,7 +15,8 @@ export const getUserAvatar = async (req, res) => {
     // Return the user's avatar URL (assuming avatar is stored in a field `avatar` in the User model)
     res.status(200).json({
       avatar: user.avatar,
-      username : user.username
+      username : user.username,
+      success: true,
         // Assuming `avatar` field contains the URL to the user's avatar
     });
   } catch (error) {

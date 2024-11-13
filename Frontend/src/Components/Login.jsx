@@ -15,14 +15,15 @@ const Login = () => {
     console.log(formData); // Log formData to check if it's sending the correct values
   
     try {
-      const result = await axios.post("/user/login", formData, {
-        withCredentials: true // This allows cookies to be sent/received
-      });
+      const result = await axios.post("/user/login", formData);
       console.log(result);
   
       // Show success toast
       toast.success("Successfully logged in!");
-  
+
+      const token = result.data.token;
+      console.log("token", token);
+      localStorage.setItem("token", token); // Save token in localStorage
       // Navigate to Home component
       navigate("/");
     } catch (error) {
