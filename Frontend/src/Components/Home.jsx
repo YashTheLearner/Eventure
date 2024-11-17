@@ -4,6 +4,8 @@ import carrer from '../assets/career-development.jpg';
 import axios from '../Axios/axios.jsx';
 import { useNavigate } from 'react-router-dom';
 import { EventsCard2 } from './EventsCard2.jsx';
+import { EventsCard} from './EventsCard.jsx';
+
 
 
 
@@ -12,36 +14,57 @@ const Home = () => {
   const [name, setName] = useState(null);
   const [avatar, setAvatar] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [events, setEvents] = useState([]); 
 
   const navigate = useNavigate();
   useEffect(() => {
     const fetchAvatar = async () => {
       try {
-        // Retrieve the token from localStorage
         const token = localStorage.getItem('token');
-
-        // Make the request to fetch the avatar, include the token in the headers
-        let response = await axios.get(`/user/avatar`, {
+        const response = await axios.get(`/user/avatar`, {
           headers: {
-            Authorization: `Bearer ${token}`  // Send token as Bearer token
+            Authorization: `Bearer ${token}`,
           },
         });
-        if(response.data.success === true){
+
+        if (response.data.success) {
           setIsAuthenticated(true);
+          setName(response.data.user.name);
+          setAvatar(response.data.user.avatar);
         }
-        console.log(response.data); // Log the response to check the data
       } catch (error) {
-        // If the error is 401 (Unauthorized), clear localStorage and redirect to login
         if (error.response && error.response.status === 401) {
-          localStorage.removeItem('token'); // Clear the token);
+          localStorage.removeItem('token');
         } else {
-          console.log('Unexpected error:', error);
+          console.error('Unexpected error:', error);
         }
       }
     };
 
-    // Call the fetchAvatar function when the component mounts
+    const fetchEvents = async () => {
+      try {
+        const token = localStorage.getItem('token');
+
+        const response = await axios.get('/event/all',{
+          
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        ); // API to fetch events
+
+        console.log(response.data.events)
+        console.log(response.data.success + "nello")
+        if (response.data.success) {
+          setEvents(response.data.events); // Set events in state
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+
     fetchAvatar();
+    fetchEvents(); // Fetch events on component mount
   }, []); // Add navigate to the dependency array
 
 console.log(isAuthenticated);
@@ -62,6 +85,21 @@ console.log(isAuthenticated);
 
 
       <div className="bg-[#ffcc00] p-[1px] "></div>
+
+      <div className="upcoming-events mt-[20px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {events.map((event) => (
+            <EventsCard
+              key={event._id}
+              eventTitle={event.eventTitle}
+              shortDescription={event.shortDescription}
+              dateTime={event.dateTime}
+              location={event.location}
+              img={event.img}
+            />
+          ))}
+        </div>
+
+
 
       <div className="upcoming-events mt-[20px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
   {/* <!-- Event Card 1 --> */}
