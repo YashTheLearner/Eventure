@@ -1,27 +1,23 @@
 import mongoose from "mongoose";
 
 const eventSchema = new mongoose.Schema({
-  title: {
+  eventTitle: {
     type: String,
     required: true,
   },
-  ShortDescription: {
+  shortDescription: {
     type: String,
     required: true,
   },
-  LongDescription: {
+  detailedDescription: {
     type: String,
     required: true,
   },
-  img:{
+  img: {
     type: String,
     required: false,
-    
-     
   },
-  
-
-  date: {
+  dateTime: {
     type: Date,
     required: true,
   },
@@ -31,27 +27,32 @@ const eventSchema = new mongoose.Schema({
   },
   Mode: {
     type: String,
-    required: true
+    required: false,
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',  // Reference to the User model
+    ref: 'User', // Reference to the User model
     required: true,
   },
   attendees: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',  // Reference to the User model (optional, if you want to track attendees)
+    ref: 'User', // Reference to the User model
   }],
-  capacity:{
+  capacity: {
     type: Number,
     required: true,
     default: 0,
     validate: {
       validator: Number.isInteger,
-      message: '{VALUE} is not an integer.'
-    }
-  }
-}, { versionKey: false });
+      message: '{VALUE} is not an integer.',
+    },
+  },
+  pincode: {
+    type: String,
+    required: true,
+  },
+}, { versionKey: false }); // Ensure the options object is outside 
+
 
 const Event = mongoose.model('Event', eventSchema);
-export default Event;
+export default Event;  
