@@ -104,4 +104,40 @@ const getUser = async (req,res) => {
         res.status(502).json({message: error.message})
     }
 }
-export {loginUser, registerUser, getUser}
+
+const updateUser = async (req, res) => {
+    const { newUsername, userBio, userLinkedIn, userInsta, userDiscord } = req.body;
+    const userId = req.user.id; // Assuming `req.user` is set by authentication middleware
+
+    try {
+        const updates = {};
+
+        // Only update fields that are provided in the request body
+        if (newUsername) {
+            const exists = await userModel.findOne({ username: newUsername });
+            if (exists && exists._id.toString() !== userId) {
+                return res.status(400).json({ message: "Username already exists" });
+            }
+            updates.username = newUsername;
+        }
+        if (userBio) updates.userBio = userBio;
+        if (userLinkedIn) updates.userLinkedIn = userLinkedIn;
+        if (userInsta) updates.userInsta = userInsta;
+       if(userDiscord) updates.userDiscord = userDiscord;
+        // Find user by ID and update their data
+        const updatedUser = await userModel.findByIdAndUpdate(userId, updates, { new: true });
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json({
+            message: "User updated successfully",
+            user: updatedUser,
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export {loginUser, registerUser, getUser,updateUser}
