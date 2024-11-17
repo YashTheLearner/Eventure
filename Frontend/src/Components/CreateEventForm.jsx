@@ -28,6 +28,7 @@ const CreateEventForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
     try {
+      const token = localStorage.getItem("token");
       const formDataToSend = new FormData();
       for (const key in formData) {
         formDataToSend.append(key, formData[key]);
@@ -35,13 +36,15 @@ const CreateEventForm = () => {
 
       // Replace "/event/create" with your actual API endpoint
       const result = await axios.post("/event/create", formDataToSend, {
-       
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
       });
-
+      console.log(result.data);
       toast.success("Event created successfully!");
       navigate("/events"); // Navigate to the events page or another appropriate route
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to create event");
+      console.log(error|| "Failed to create event");
     }
   };
 
