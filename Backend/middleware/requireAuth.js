@@ -22,7 +22,6 @@ const requireAuth = async (req, res, next) => {
         // Attach user data to the request object
         req.user = decoded;
         req.token = token; // Optional: attach the token if needed for reference
-
         next(); // Call the next middleware or route handler
     } catch (error) {
         // Handle specific JWT errors like invalid/expired token

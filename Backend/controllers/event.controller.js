@@ -22,9 +22,8 @@ export const getAllEvents = async (req, res) => {
 // Controller to handle event creation (already provided)
 export const createEvent = async (req, res) => {
     const { eventTitle, shortDescription, detailedDescription, dateTime, location, pincode,capacity } = req.body;
-
     try {
-        if (!eventTitle || !shortDescription || !detailedDescription || !dateTime || !pincode || location||capacity) {
+        if (!eventTitle || !shortDescription || !detailedDescription || !dateTime || !pincode || !location||!capacity) {
             return res.status(400).json({ message: "Please provide all required fields" });
         }
 

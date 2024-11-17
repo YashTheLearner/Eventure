@@ -33,16 +33,16 @@ const CreateEventForm = () => {
       for (const key in formData) {
         formDataToSend.append(key, formData[key]);
       }
-
+      console.log(formDataToSend);
       // Replace "/event/create" with your actual API endpoint
-      const result = await axios.post("/event/create", formDataToSend, {
+      const result = await axios.post("/event/create", formData, {
           headers: {
             Authorization: `Bearer ${token}`,
           }
       });
-      console.log(result.data);
-      toast.success("Event created successfully!");
-      navigate("/events"); // Navigate to the events page or another appropriate route
+      if(result.status === 201) {
+      navigate("/"); // Navigate to the events page or another appropriate route
+      }
     } catch (error) {
       console.log(error|| "Failed to create event");
     }
