@@ -21,23 +21,27 @@ export const getAllEvents = async (req, res) => {
 
 // Controller to handle event creation (already provided)
 export const createEvent = async (req, res) => {
-    const { title, description, date, location, Mode } = req.body;
+    const { eventTitle, shortDescription, detailedDescription, dateTime, location, pincode,capacity } = req.body;
 
     try {
-        if (!title || !description || !date || !location || !Mode) {
+        if (!eventTitle || !shortDescription || !detailedDescription || !dateTime || !pincode || location||capacity) {
             return res.status(400).json({ message: "Please provide all required fields" });
         }
 
         const newEvent = new Event({
-            title,
-            description,
-            date,
-            location,
-            Mode,
+            eventTitle,
+             shortDescription,
+              detailedDescription,
+               dateTime,
+                location,
+                pincode,
+                capacity,
             createdBy: req.user.id
         });
 
         const savedEvent = await newEvent.save();
+        console.log(savedEvent);
+        
 
         res.status(201).json({
             message: "Event created successfully",

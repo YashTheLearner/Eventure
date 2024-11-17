@@ -37,9 +37,10 @@ const CreateEventForm = () => {
       const result = await axios.post("/event/create", formDataToSend, {
        
       });
+      console.log(result)
 
       toast.success("Event created successfully!");
-      navigate("/events"); // Navigate to the events page or another appropriate route
+      // navigate("/events"); // Navigate to the events page or another appropriate route
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to create event");
     }
