@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { EventsCard } from './EventsCard'; // Assume this component displays event details
+import { useOutletContext } from 'react-router-dom';
 
-const MyEvents = () => {
+const MyEvents = ({isActive}) => {
   // Sample event data
+
+  const { toggleSideBar } = useOutletContext();
+  useEffect(() => {
+    toggleSideBar(); // This will only run once when the component is mounted
+  }, [isActive]);
+
   const eventsData = [
     { id: 1, name: 'Tech Conference 2024', date: '2024-12-15', category: 'Technology' },
     { id: 2, name: 'Art Expo', date: '2024-11-20', category: 'Art' },

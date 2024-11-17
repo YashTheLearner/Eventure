@@ -1,20 +1,66 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { EventsCard } from './EventsCard';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 
-const Profile = () => {
+const Profile = ({isActive}) => {
   // Initial user data
-  const initialUserData = {
-    avatar: 'https://via.placeholder.com/150', // Replace with actual avatar URL
-    username: 'John Doe',
-    bio: 'Software developer passionate about coding and events.',
-    hostedCount: 5,
-    attendedCount: 10,
-    socialLinks: {
-      instagram: 'https://instagram.com/username',
-      discord: 'https://discord.com/invite/example',
-      linkedIn: 'https://linkedin.com/in/username',
-    },
-  };
+  const { toggleSideBar } = useOutletContext();
+  useEffect(() => {
+    toggleSideBar(); // This will only run once when the component is mounted
+  }, [isActive]);
+
+  const [name, setName] = useState(null);
+  const [avatar, setAvatar] = useState("http://localhost:3000/public/default.jpg");
+  const [bio, setBio] = useState("Bio");
+  const [hostedCount, setHostedCount] = useState(0);
+  const [attendedCount, setAttendedCount] = useState(0);
+  const [instagram, setInstagram] = useState("https://instagram.com/");
+  const [discord, setDiscord] = useState("https://discord.com/");
+  const [linkedIn, setLinkedIn] = useState("https://linkedin.com/");
+
+
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No token found");
+        }
+
+        const response = await axios.get(`/getuser`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.data.success) {
+          const user = response.data.user;
+          setIsAuthenticated(true);
+          setName(response.data.username);
+          // Set avatar dynamically based on response
+          setAvatar(response.data.avatar ? `http://localhost:3000/public/${response.data.avatar}` : "http://localhost:3000/public/default.jpg");
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          localStorage.removeItem("token");
+          setIsAuthenticated(false);
+          toast.error("Session expired. Please log in again.");
+          // navigate("/");
+        } else {
+          console.error("Unexpected error:", error);
+          toast.error("An error occurred. Please try again later.");
+        }
+      } finally {
+        setLoading(false); // Ensure loading state is false after the request
+      }
+    };
+
+    fetchAvatar();
+  }, [ navigate]);
+
+
 
   // State to manage user data
   const [userData, setUserData] = useState(initialUserData);
@@ -45,7 +91,7 @@ const Profile = () => {
       {/* Left side - User Information */}
       <div className="w-[28%] bg-[rgba(17,24,39,1)] border-[rgb(149 149 149)] border-[1px] text-white rounded-lg p-6">
         <img
-          src={userData.avatar}
+          src={avatar}
           alt="User Avatar"
           className="rounded-full w-32 h-32 mx-auto mb-4"
         />
@@ -118,7 +164,7 @@ const Profile = () => {
 
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className="mt-4 w-full bg-blue-600 p-2 rounded hover:bg-blue-700"
+          className=" w-full bg-blue-600 p-2 rounded hover:bg-blue-700"
         >
           {isEditing ? 'Save' : 'Edit Profile'}
         </button>

@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useOutletContext } from 'react-router-dom';
 
-const Dashboard = () => {
+const Dashboard = ({isActive}) => {
+
+  const { toggleSideBar } = useOutletContext();
+  useEffect(() => {
+    toggleSideBar(); // This will only run once when the component is mounted
+  }, [isActive]);
+
   // Sample event data for the dashboard
   const events = [
     {
