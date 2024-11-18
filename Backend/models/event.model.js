@@ -39,19 +39,19 @@ const eventSchema = new mongoose.Schema({
     ref: 'User', // Reference to the User model
   }],
   registrations:{
-    type: Number,
+    type: [String],
     required: false,
-    default: 0,
+    default: [],
   },
   attendees:{
-    type: Number,
+    type: [String],
     required: false,
-    default: 0,
+    default: [],
   },
   rsvp:{
-    type: Number,
+    type: [String],
     required: false,
-    default: 0,
+    default: [],
   },
   capacity: {
     type: Number,

@@ -7,7 +7,7 @@ export const EventsCard = ({id, eventTitle, shortDescription, dateTime, location
   return (
     <div onClick={
       ()=>{Navigate(`/event/${id}`)}
-    }  className="event-card p-4 bg-[#22333b] shadow-md rounded-md">
+    }  className="event-card p-4 text-[#ffcc00] shadow-md rounded-md">
      <img src={carrer} alt="Event Image 1" className="event-image w-full h-[150px] object-cover" />
       <h3 className="mt-2 font-bold text-lg">{eventTitle}</h3>
       <p className="text-white">{shortDescription}</p>

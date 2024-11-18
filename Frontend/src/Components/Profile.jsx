@@ -220,9 +220,9 @@ const Profile = ({ isActive }) => {
 
       {/* Right side - Hosted Events */}
       <div className="w-2/3 border-[rgb(149 149 149)] border-[1px] rounded-lg p-6 ml-6">
-        <h2 className="text-2xl text-white flex font-bold mb-4"><div className={`${isShowingHosted?"text-red-700":""}`} onClick={()=>{
+        <h2 className="text-2xl text-white flex font-bold mb-4"><div className={`${isShowingHosted?"text-[#ffcc00]":""}`} onClick={()=>{
           setIsShowingHosted(true);
-        }} >Hosted&nbsp;</div ><div className={`${isShowingHosted?"":"text-red-700"}`} onClick={()=>{
+        }} >Hosted&nbsp;</div ><div className={`${isShowingHosted?"":"text-[#ffcc00]"}`} onClick={()=>{
           setIsShowingHosted(false);
         }}> / Attended</div></h2>
         <div className="grid grid-cols-1 md:grid-cols-2 h-[80vh] overflow-y-auto gap-4">
