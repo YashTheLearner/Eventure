@@ -11,6 +11,6 @@ router.post('/create',requireAuth , createEvent);
 
 // Route to get all events
 router.get('/all', getAllEvents );
-router.get('/:eventId', requireAuth, getEventById);
+router.get('/:id', getEventById);
 
 export default router;

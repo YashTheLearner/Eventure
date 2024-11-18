@@ -38,6 +38,21 @@ const eventSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', // Reference to the User model
   }],
+  registrations:{
+    type: Number,
+    required: false,
+    default: 0,
+  },
+  attendees:{
+    type: Number,
+    required: false,
+    default: 0,
+  },
+  rsvp:{
+    type: Number,
+    required: false,
+    default: 0,
+  },
   capacity: {
     type: Number,
     required: true,

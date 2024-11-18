@@ -2,9 +2,10 @@
 import Event from '../models/event.model.js'; // Assuming this is the Event model
 
 export const getEventById = async (req, res) => {
+  console.log('Fetching event by ID');
   try {
-    const eventId = req.params.eventId; // Get eventID from the route parameter
-
+    const eventId = req.params.id; // Get eventID from the route parameter
+    console.log('Event ID:', eventId);
     // Find the event by ID
     const event = await Event.findById(eventId); // You can add other methods like populate if needed
 

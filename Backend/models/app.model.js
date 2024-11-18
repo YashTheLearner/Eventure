@@ -17,18 +17,27 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     age: {
+      default: 0,
       type: Number,
       required: false,
     },
     userBio: {
+      default: "Hey there! I am using Eventify.",
       type: String,
       required: false,
     },
     userLinkedIn: {
+      default: "",
       type: String,
       required: false,
     },
     userInsta: {
+      default: "",
+      type: String,
+      required: false,
+    },
+    userDiscord:{
+      default: "",
       type: String,
       required: false,
     },

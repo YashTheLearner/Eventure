@@ -60,7 +60,7 @@ export const Navbar = ({
     <div className="h-[60px] bg-[#1b263b] py-[8px] px-[96px] flex justify-between items-center">
       {/* Eventure Logo */}
       <div>
-        <div className="text-[1.4rem] font-bold text-[#ffcc00] tracking-widest">
+        <div className="text-[1.4rem] font-bold text-[#ffcc00] tracking-widest" onClick={()=>navigate("/")}>
           EVENTURE
         </div>
       </div>

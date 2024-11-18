@@ -41,13 +41,19 @@ export const createEvent = async (req, res) => {
 
         const savedEvent = await newEvent.save();
         console.log(savedEvent);
-        
+        const userId = req.user.id;
+        const updatedUser = await userModel.findOneAndUpdate(
+            { _id: userId }, // Find user by their ID or another identifier
+            { $inc: { noOfHosted : 1 } }, // Increment the `hostedCount` field by 1
+            { new: true } // Return the updated document
+          );
 
         res.status(201).json({
             message: "Event created successfully",
             event: savedEvent
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: error.message });
     }
 };

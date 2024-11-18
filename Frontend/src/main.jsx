@@ -20,7 +20,7 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { path: '', element: <Home /> },
-      { path: 'event', element: <Event /> },
+      { path: 'event/:id', element: <Event /> },
       { path: 'profile', element: <Profile /> },
       { path: 'createEvent', element: <CreateEventForm /> },
       { path: 'side', element: <Sidebar /> },

@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import eventImage from '../assets/photo.jpg'; // Ensure the path is correct
 import mapImage from '../assets/photo.jpg'; // Ensure the path is correct
+import axios from '../Axios/axios'; // Import axios instance
+import { useParams } from "react-router-dom";
 
 const Event = () => {
+  const [eventDetails, setEventDetails] = useState({});
+  const { id } = useParams(); // Extracts 'id' from the URL
+  useEffect(() => {
+    async function fetchEventDetails () {
+    const response = await axios.get(`/event/${id}`); // Fetch event details by ID
+    setEventDetails(response.data) // Log the response to check the data
+    }
+    fetchEventDetails();
+  }, []);
   return (
     <div className="bg-[#2c3e50] min-h-screen flex justify-center items-center px-4 py-8">
       <div className="max-w-4xl w-full bg-white rounded-lg shadow-lg overflow-hidden">
@@ -13,7 +24,7 @@ const Event = () => {
           style={{ backgroundImage: `url(${eventImage})` }}
         >
           <div className="bg-black bg-opacity-50 h-full w-full flex items-center justify-center text-white text-3xl font-bold">
-            Event Title
+          {eventDetails.eventTitle}
           </div>
         </div>
 
@@ -21,13 +32,14 @@ const Event = () => {
           
           {/* Short Description */}
           <p className="text-gray-700 text-lg">
-            This is a short description of the event to give attendees a quick overview of what to expect.
-          </p>
+            {eventDetails.shortDescription
+            }
+             </p>
 
           {/* Detailed Description */}
           <p className="text-gray-600">
-            Here, you can provide a more detailed description of the event, including information about the speakers, agenda, and the unique experiences attendees will gain by joining. Make this section informative yet engaging to keep the readers interested.
-          </p>
+           {eventDetails.detailedDescription
+           }  </p>
 
           <div className="flex flex-col md:flex-row gap-4 mt-6">
             {/* Date and Time Card */}
@@ -45,7 +57,7 @@ const Event = () => {
               <p className="text-gray-800 font-semibold text-xl">Location</p>
               <img src={mapImage} alt="Map" className="w-full h-32 object-cover mt-2 rounded-lg" />
               <p className="text-gray-600 mt-2 text-center">
-                123 Event Street, City, Country
+                {eventDetails.location},{eventDetails.pincode}
               </p>
             </div>
           </div>

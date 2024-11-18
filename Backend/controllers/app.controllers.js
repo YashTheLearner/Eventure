@@ -95,13 +95,50 @@ const registerUser = async (req,res) => {
 
 //get user info
 const getUser = async (req,res) => {
-    console.log(req);
+    // console.log(req);
     const id = req.user.id
     try{
         const user = await userModel.find({_id:id})
         res.status(200).json({user: user[0]})
+        console.log(user)
     } catch(error){
         res.status(502).json({message: error.message})
     }
 }
-export {loginUser, registerUser, getUser}
+
+const updateUser = async (req,res) => {
+    try {
+        const userId  = req.user.id; // Assuming the user ID is passed in the URL params
+        const { username, bio, instagram, discord, linkedIn, avatar } = req.body; // Extract data from the request body
+        console.log(userId)
+        // Find the user by ID and update their profile
+        const updatedUser = await userModel.findByIdAndUpdate(
+          userId, // User ID
+          {
+            name: username, // Update username
+            userBio:bio,
+            userInsta: instagram, // Update specific social links
+            userDiscord: discord,
+            userLinkedIn: linkedIn,
+            // avatar, // Avatar URL
+          },
+          { new: true } // Return the updated document
+        );
+    
+        if (!updatedUser) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+    
+        // Return the updated user
+        res.status(200).json({
+          success: true,
+          message: 'Profile updated successfully',
+          updatedUser,
+        });
+      } catch (error) {
+        console.log('Error updating profile:', error);
+        res.status(500).json({ message: 'An error occurred, please try again later' });
+      }
+    };
+export {loginUser, registerUser, getUser , updateUser}
+

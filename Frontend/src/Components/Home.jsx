@@ -18,28 +18,28 @@ const Home = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
-    const fetchAvatar = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get(`/user/avatar`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  //   const fetchAvatar = async () => {
+  //     try {
+  //       const token = localStorage.getItem('token');
+  //       const response = await axios.get(`/user/avatar`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
 
-        if (response.data.success) {
-          setIsAuthenticated(true);
-          setName(response.data.user.name);
-          setAvatar(response.data.user.avatar);
-        }
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          localStorage.removeItem('token');
-        } else {
-          console.error('Unexpected error:', error);
-        }
-      }
-    };
+  //       if (response.data.success) {
+  //         setIsAuthenticated(true);
+  //         setName(response.data.user.username);
+  //         setAvatar(response.data.user.avatar);
+  //       }
+  //     } catch (error) {
+  //       if (error.response && error.response.status === 401) {
+  //         localStorage.removeItem('token');
+  //       } else {
+  //         console.error('Unexpected error:', error);
+  //       }
+  //     }
+  //   };
 
     const fetchEvents = async () => {
       try {
@@ -53,8 +53,8 @@ const Home = () => {
           }
         ); // API to fetch events
 
-        console.log(response.data.events)
-        console.log(response.data.success + "nello")
+        // console.log(response.data.events)
+        // console.log(response.data.success)
         if (response.data.success) {
           setEvents(response.data.events); // Set events in state
         }
@@ -63,11 +63,11 @@ const Home = () => {
       }
     };
 
-    fetchAvatar();
+    // fetchAvatar();
     fetchEvents(); // Fetch events on component mount
   }, []); // Add navigate to the dependency array
 
-console.log(isAuthenticated);
+// console.log(isAuthenticated);
 
   return (
     <>
@@ -88,13 +88,14 @@ console.log(isAuthenticated);
 
       <div className="upcoming-events mt-[20px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => (
-            <EventsCard
+            <EventsCard2
               key={event._id}
               eventTitle={event.eventTitle}
               shortDescription={event.shortDescription}
               dateTime={event.dateTime}
               location={event.location}
               img={event.img}
+              id = {event._id}
             />
           ))}
         </div>
@@ -103,6 +104,7 @@ console.log(isAuthenticated);
 
       <div className="upcoming-events mt-[20px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
   {/* <!-- Event Card 1 --> */}
+  {/* <EventsCard2 />
   <EventsCard2 />
   <EventsCard2 />
   <EventsCard2 />
@@ -113,8 +115,7 @@ console.log(isAuthenticated);
   <EventsCard2 />
   <EventsCard2 />
   <EventsCard2 />
-  <EventsCard2 />
-  <EventsCard2 />
+  <EventsCard2 /> */}
 
 </div>
     

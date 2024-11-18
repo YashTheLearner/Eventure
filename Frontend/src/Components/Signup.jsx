@@ -153,7 +153,7 @@ export const Signup = () => {
         
         // localStorage.setItem("token", result.data.token); // Save token
         alert("Registration Successful!");
-        navigate("/home");
+        navigate("/login");
     } catch (error) {
         console.log(error);
         alert(error.response?.data?.message || "Registration failed!");
