@@ -41,6 +41,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    userDiscord: {
+      type: String,
+      required: false,
+    },
     noOfAttended: {
       type: Number,
       default: 0,

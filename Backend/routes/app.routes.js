@@ -10,6 +10,7 @@ const route = express.Router();
 
 route.post("/login" , loginUser);
 route.post("/register" , registerUser);
+route.post("/updateuser", requireAuth ,updateUser);
 route.get("/getuser", requireAuth, getUser)
 route.put('/updateuser', requireAuth, updateUser);
 route.get('/attendedevents', requireAuth, getAttendedEvents);
